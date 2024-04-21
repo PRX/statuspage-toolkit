@@ -5,8 +5,7 @@ Description: >-
   Creates resources for integrating with Statuspage.io
 
 Parameters:
-  CrossAccountSharingRoleName:
-    { Type: String, Default: CloudWatch-CrossAccountSharingRole }
+  CrossAccountSharingRoleName: { Type: String, Default: CloudWatch-CrossAccountSharingRole }
   StatuspageApiKey: { Type: String }
 
 Resources:
