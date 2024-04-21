@@ -30,9 +30,9 @@ async function sendDataPoints(pageId, data) {
           "Error encountered. Please ensure that your page code and authorization key are correct.";
         return console.error(genericError);
       }
-      res.on("data", function () {});
+      res.on("data", function d() {});
 
-      res.on("end", function () {
+      res.on("end", function e() {
         resolve();
       });
 
