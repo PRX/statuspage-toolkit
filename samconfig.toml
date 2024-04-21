@@ -1,0 +1,17 @@
+# sam build && sam deploy
+
+version = 0.1
+
+[default.deploy.parameters]
+profile = "prx-devops"
+stack_name = "statuspage-toolkit"
+s3_prefix = "statuspage-toolkit"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+region = "us-east-2"
+resolve_s3 = true
+# Parameter overrides only need to be included when a parameter is changing
+# parameter_overrides = [
+#   "CrossAccountSharingRoleName=CloudWatch-CrossAccountSharingRole",
+#   "StatuspageApiKey=GET_ME_FROM_STATUSPAGE_BACKEND"
+# ]
