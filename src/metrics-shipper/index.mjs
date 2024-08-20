@@ -218,6 +218,75 @@ async function mediaProcessingVolume() {
   return data;
 }
 
+async function mediaProcessingMaxAge() {
+  const role = await sts.send(
+    new AssumeRoleCommand({
+      RoleArn: roleArn("561178107736"),
+      RoleSessionName: "statuspage_data_sender",
+    }),
+  );
+
+  const cloudwatch = new CloudWatchClient({
+    region: "us-east-1",
+    credentials: {
+      accessKeyId: role.Credentials.AccessKeyId,
+      secretAccessKey: role.Credentials.SecretAccessKey,
+      sessionToken: role.Credentials.SessionToken,
+    },
+  });
+
+  const results = await cloudwatch.send(
+    new GetMetricDataCommand({
+      MetricDataQueries: [
+        {
+          Id: "age",
+          MetricStat: {
+            Metric: {
+              Namespace: "AWS/SQS",
+              MetricName: "ApproximateAgeOfOldestMessage",
+              Dimensions: [
+                {
+                  Name: "QueueName",
+                  Value: "dc51b3fd_prod_feeder_fixer_callback",
+                },
+              ],
+            },
+            Period: 60,
+            Stat: "Maximum",
+            Unit: "Seconds",
+          },
+        },
+      ],
+      StartTime: new Date(+new Date() - 10 * 60000),
+      EndTime: new Date(),
+    }),
+  );
+
+  const datapoints = [];
+
+  if (results.MetricDataResults.length) {
+    for (
+      let index = 0;
+      index < results.MetricDataResults[0].Values.length;
+      index += 1
+    ) {
+      const value = results.MetricDataResults[0].Values[index];
+      const timestamp = results.MetricDataResults[0].Timestamps[index];
+
+      datapoints.push({
+        timestamp: Math.floor(+timestamp / 1000),
+        value: value / 60, // values come from CloudWatch in seconds, send in Minutes
+      });
+    }
+  }
+
+  const data = {
+    "2tl9hp9lcz7y": datapoints,
+  };
+
+  return data;
+}
+
 // Statuspage expects to get at least one value for every 5 minute period; if
 // there's a 5 minute period with no value, it show up as a gap in the chart.
 //
@@ -243,10 +312,12 @@ async function mediaProcessingVolume() {
 export const handler = async () => {
   const analyticsProcessingLatencyData = await analyticsProcessingLatency();
   const mediaProcessingVolumeData = await mediaProcessingVolume();
+  const mediaProcessingMaxAgeData = await mediaProcessingMaxAge();
 
   const metricsData = {
     ...analyticsProcessingLatencyData,
     ...mediaProcessingVolumeData,
+    ...mediaProcessingMaxAgeData,
   };
 
   console.log(JSON.stringify(metricsData));
