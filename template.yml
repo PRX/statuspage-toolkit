@@ -27,7 +27,7 @@ Resources:
             State: ENABLED
           Type: Schedule
       Handler: index.handler
-      MemorySize: 128
+      MemorySize: 129
       Policies:
         - Statement:
             - Action: sts:AssumeRole
