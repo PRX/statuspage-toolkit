@@ -11,6 +11,7 @@ Resources:
   MetricsShipperFunction:
     Type: AWS::Serverless::Function
     Properties:
+      Architectures: [arm64]
       CodeUri: src/metrics-shipper
       Description: >-
         Fetches various metrics from CloudWatch and sends them to Statuspage
