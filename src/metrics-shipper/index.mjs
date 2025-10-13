@@ -1,9 +1,9 @@
-import * as http from "https";
+import * as http from "node:https";
 import {
   CloudWatchClient,
   GetMetricDataCommand,
 } from "@aws-sdk/client-cloudwatch";
-import { STSClient, AssumeRoleCommand } from "@aws-sdk/client-sts";
+import { AssumeRoleCommand, STSClient } from "@aws-sdk/client-sts";
 
 const PAGE_ID = "zlzvfpy9x7fy";
 
@@ -84,7 +84,7 @@ async function iteratorAgeData(accountId, region, functionName) {
           },
         },
       ],
-      StartTime: new Date(+new Date() - 10 * 60000),
+      StartTime: new Date(Date.now() - 10 * 60000),
       EndTime: new Date(),
     }),
   );
@@ -188,7 +188,7 @@ async function mediaProcessingVolume() {
           },
         },
       ],
-      StartTime: new Date(+new Date() - 10 * 60000),
+      StartTime: new Date(Date.now() - 10 * 60000),
       EndTime: new Date(),
     }),
   );
@@ -257,7 +257,7 @@ async function mediaProcessingMaxAge() {
           },
         },
       ],
-      StartTime: new Date(+new Date() - 10 * 60000),
+      StartTime: new Date(Date.now() - 10 * 60000),
       EndTime: new Date(),
     }),
   );
