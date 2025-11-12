@@ -1,0 +1,8 @@
+{
+  "name": "metrics-shipper",
+  "version": "0.0.1",
+  "dependencies": {
+    "@aws-sdk/client-cloudwatch": "*",
+    "@aws-sdk/client-sts": "*"
+  }
+}
