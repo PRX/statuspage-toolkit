@@ -33,7 +33,7 @@ async function sendDataPoints(pageId, data) {
       res.on("data", function d() {});
 
       res.on("end", function e() {
-        resolve();
+        resolve("done");
       });
 
       res.on("error", (error) => {
